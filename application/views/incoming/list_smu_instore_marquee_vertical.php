@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta http-equiv="refresh" content="300; url=<?php echo site_url("instore"); ?>"> 
 <style type="text/css">
 html {
 	margin : 0px;
@@ -12,12 +13,12 @@ body{
 
 table.gridtable {
 	font-family: time,verdana,arial,sans-serif;
-	font-size:12px;
+	font-size:18px;
 	color:#333333;
 	border-width: 0px;
 	border-color: #666666;
 	border-collapse: collapse;
-	width:100mm;
+	
 }
 
 table.gridtable th {
@@ -33,7 +34,7 @@ table.gridtable td {
 	border-style: solid;
 	border-color: #ffffff;
 	text-align: left;
-	font-size: 18px;
+	font-size: 30px;
 	color: #ffff00;
 }
 </style>
@@ -41,18 +42,36 @@ table.gridtable td {
 <body>
 <div id="content">
 	<center>
-	<marquee  scrollamount="2" direction="up" loop="true" width="100%"> 
+    <table class="gridtable" width="100%">
+    	<tr>
+        	<td colspan="5" align="center"><center>Kualanamu International Airport</center></td>
+        </tr>
+        <tr>
+        	<td colspan="5" align="center"><center>Domestic Warehouse Information System</center></td>
+        </tr>
+        <tr>
+        	<td width="10%">Airline</td>
+            <td width="25%">Agent</td>
+        	<td width="25%">No SMU</td>
+            <td width="20%">Koli</td>
+            <td width="20%">Berat</td>
+        </tr>
+        </table>
+	<marquee  scrollamount="2" direction="down" loop="true" height="768px">
 		<font color="#ffffff">
 			<strong> 
-				<table class="gridtable">
+				
+        <table class="gridtable" width="100%" height="100%">
 				<?php 
 				if(isset($result)){
 					foreach($result as $row){	
 				?>
 					<tr>
-						<td width="30%"><?php echo 	$row->inb_no_smu ;?></td>
-						<td width="30%"><?php echo 	$row->inb_koli." koli" ;?></td>
-						<td width="30%"><?php echo 	$row->inb_berat_aktual." kg" ;?></td>
+						<td width="10%"><?php echo 	strtoupper($row->inb_airlines) ;?></td>
+                        <td width="25%"><?php echo 	strtoupper($row->in_agent) ;?></td>
+                        <td width="25%"><?php echo 	$row->inb_no_smu ;?></td>
+						<td width="20%"><?php echo 	$row->inb_koli." koli" ;?></td>
+						<td width="20%"><?php echo 	floor($row->inb_berat_aktual) ." kg" ;?></td>
 					</tr>
 				<?php
 					}
@@ -63,6 +82,8 @@ table.gridtable td {
 		</font>
 	</marquee>
 	</center>
+    
+    
 </div>	
 </body>
 </html>

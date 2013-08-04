@@ -268,6 +268,26 @@ class Cashier extends CI_Model {
 		$this->db->update('in_dtbarang', array('in_status_bayar'=>'no'), array('in_btb'=>$no_btb));
 		$this->db->update('deliverybill', array('isvoid'=>'1', 'keterangan'=>$this->input->post('reason'),'voidby'=>$user), array('no_smubtb'=>$no_btb));
 	 }
+	 
+	 public function my_balance_incoming($user, $date)
+	 {
+		 $query = ("
+		 SELECT * FROM `deliverybill`
+		 JOIN  in_dtbarang ON in_btb = no_smubtb
+			WHERE `user` = '" . $user . "' 
+			AND DATE(`tglbayar`) = '" . $date . "' 
+			
+			AND `isvoid` = 0
+		");
+		 
+		 #$this->db->where('user', $user);
+		 #$this->db->where('DATE(tglbayar)', $date);
+		 #$this->db->where('status', 1);
+		 #$this->db->where('isvoid', 1);
+		 #$this->db->from('deliverybill');
+		 $query = $this->db->query($query);
+		return $query->result();
+	 }
 }
 
 /* End of file airline.php */

@@ -85,6 +85,7 @@ class Login extends CI_Controller {
 		$hash = $this->encrypt->sha1($password, $this->config->item('encryption_key'));
 		
 		$this->user_model->save($id_user , $password, $nama_lengkap, $email, $nipp, $level, $jabatan);
+		redirect('dashboard');
 		
 	}
 	

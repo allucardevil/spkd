@@ -137,6 +137,7 @@ document.getElementById("total").value = tsg;
 						else {
 							echo form_submit('submit', 'PRINT ULANG' , 'class="btn btn-primary"');
 							echo '&nbsp';
+							echo '&nbsp';
 							echo anchor('cashier/payment/void_dbo/'.$row->btb_nobtb,'VOID');
 						}?>
 </td>

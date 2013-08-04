@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://192.168.25.90/v2/';
+$config['base_url']	= 'http://localhost/github/spkd/';
 
 /*
 |--------------------------------------------------------------------------

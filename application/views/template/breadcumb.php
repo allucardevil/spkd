@@ -1,30 +1,23 @@
-<div id="menu">
-	<table>
-    	<tr>
+<div class="btn-group btn-group-justified">
+
         	<?php 
 			$session_data = $this->session->userdata('logged_in');
 			if($this->session->userdata('logged_in'))
 			{
-			?>
-				<td><?php echo anchor('dashboard', $session_data['id_user']); ?></td>
-			<?php
+				echo anchor('dashboard', strtoupper($session_data['level']), 'class="btn btn-default"'); 
 			}
 			?>
             
-            <td><?php echo anchor('dashboard','Home'); ?></td>
-            <td><?php echo anchor('tracking/smu', 'SMU Tracking'); ?></td>
-            <td><?php echo anchor('tracking/btb', 'BTB Tracking'); ?></td>
-            <td><?php echo anchor('user/login','Search'); ?></td>
-            <td><?php echo anchor('user/login','Help'); ?></td>
+            <?php echo anchor('dashboard','Home', 'class="btn btn-default"'); ?>
+            <?php echo anchor('tracking/smu', 'SMU Tracking', 'class="btn btn-default"'); ?>
+            <?php echo anchor('tracking/btb', 'BTB Tracking', 'class="btn btn-default"'); ?>
+           
             
             <?php
 			# level btb
 			if($session_data['level'] == 'btb')
 	    	{
-			?>
-            <td><?php echo anchor('weighing/outgoing/add','NEW BTB'); ?></td>
-            <?php
-			# level btb
+				echo anchor('weighing/outgoing/add','BTB Baru', 'class="btn btn-default"'); 
 			}
 			?>
             
@@ -32,10 +25,6 @@
 			# level gapura management
 			if($session_data['level'] == 'gapura')
 	    	{
-			?>
-            <td></td>
-            <?php
-			# level gapura management
 			}
 			?>
             
@@ -43,14 +32,9 @@
 			# level supervisor
 			if($session_data['level'] == 'supervisor')
 	    	{
-			?>
-            <td><?php echo anchor('weighing/outgoing/add','NEW BTB'); ?></td>
-            <td><?php echo anchor('weighing/outgoing/search','SEARCH BTB'); ?></td>
-            <td><?php echo anchor('harian/incoming','LPKH Incoming'); ?></td>
-            <td><?php echo anchor('harian/outgoing','LPKH Outgoing'); ?></td>
-            <td><?php echo anchor('login/register','Register User'); ?></td>
-            <?php
-			# level supervisor
+				echo anchor('harian/incoming','LPKH Incoming', 'class="btn btn-default"'); 
+				echo anchor('harian/outgoing','LPKH Outgoing', 'class="btn btn-default"'); 
+				echo anchor('login/register','Register User', 'class="btn btn-default"'); 
 			}
 			?>
             
@@ -58,19 +42,10 @@
 			# level kasir
 			if($session_data['level'] == 'kasir')
 	    	{
-			?>
-            <td><?php echo anchor('cashier/payment','NPSG Baru'); ?></td>
-            <td><?php echo anchor('harian/incoming','LPKH Incoming'); ?></td>
-            <td><?php echo anchor('harian/outgoing','LPKH Outgoing'); ?></td>
-            <!-- incoming -->
-			<td><?php echo anchor('incoming/add_manifest_instore','Insert Incoming Manifest Instore'); ?></td>
-            <td><?php echo anchor('incoming/add_manifest_outstore','Insert Incoming Manifest Outstore'); ?></td>
-            <td><?php echo anchor('incoming/list_breakdown','Breakdown Check'); ?></td>
-            <td><?php echo anchor('incoming/form_breakdown','Breakdown Add'); ?></td>
-            <td><?php echo anchor('incoming/incoming_btb','Incoming BTB'); ?></td>
-            
-            <?php
-			# level kasir
+				echo anchor('cashier/payment','NPJG Baru', 'class="btn btn-default"'); 
+				echo anchor('harian/incoming','LPKH Incoming', 'class="btn btn-default"');
+				echo anchor('harian/outgoing','LPKH Outgoing', 'class="btn btn-default"'); 
+				echo anchor('cashier/payment/my_balance','Transaksiku', 'class="btn btn-default"'); 
 			}
 			?>
             
@@ -78,10 +53,6 @@
 			# level store in // break down checker
 			if($session_data['level'] == 'store_in')
 	    	{
-			?>
-            <td></td>
-            <?php
-			# level store in
 			}
 			?>
             
@@ -89,10 +60,7 @@
 			# level store out // build up checker
 			if($session_data['level'] == 'store_out')
 	    	{
-			?>
-            <td></td>
-            <?php
-			# level store out // build up checker
+			
 			}
 			?>
             
@@ -100,14 +68,9 @@
 			# level incoming
 			if($session_data['level'] == 'incoming')
 	    	{
-			?>
-            <!--- incoming --->
-            <td><?php echo anchor('incoming/add_manifest_instore','Input SMU Barang Gudang'); ?></td>
-            <td><?php echo anchor('incoming/form_create_btb','Create BTB Incoming'); ?></td>
-            <td><?php echo anchor('incoming/search_btb','Search Incoming SMU'); ?></td>
-            <!--- incoming --->
-            <?php
-			# level incoming
+			 	echo anchor('incoming/add_manifest_instore','Input SMU Barang Gudang', 'class="btn btn-default"'); 
+				echo anchor('incoming/form_create_btb','Create BTB Incoming', 'class="btn btn-default"'); 
+				echo anchor('incoming/search_btb','Search Incoming SMU', 'class="btn btn-default"'); 
 			}
 			?>
             
@@ -115,10 +78,7 @@
 			# level outgoing
 			if($session_data['level'] == 'outgoing')
 	    	{
-			?>
-            <td><?php echo anchor('cashier/payment','NPJG BARU'); ?></td>
-            <?php
-			# level outgoing
+			
 			}
 			?>
             
@@ -126,40 +86,17 @@
 			# level admin
 			if($session_data['level'] == 'admin')
 	    	{
-			?>
-            <!--- kasir --->
-            <td><?php echo anchor('cashier/payment','NPJG BARU'); ?></td>
-            <td><?php echo anchor('harian/incoming','LPKH Incoming'); ?></td>
-            <td><?php echo anchor('harian/outgoing','LPKH Outgoing'); ?></td>
-            <!--- kasir --->
-            
-            <!--- incoming --->
-            <td><?php echo anchor('incoming/add_manifest_instore','Input SMU Barang Gudang'); ?></td>
-            <td><?php echo anchor('incoming/form_create_btb','Create BTB Incoming'); ?></td>
-            <td><?php echo anchor('incoming/search_btb','Search Incoming SMU'); ?></td>
-            <!--- incoming --->
-            
-            <!--- outgoing --->
-            <!--- outgoing --->
-            
-            <!--- supervisor --->
-            <td><?php echo anchor('login/register','Register User'); ?></td>
-            <!--- supervisor --->
-            
-            <!--- admin --->
-            <!--- admin --->
-            
-            
-            
-            
-             
-            <td><?php echo anchor('tracking/smu', 'SMU Tracking'); ?></td>
-            <td><?php echo anchor('tracking/btb', 'BTB Tracking'); ?></td>
-            
-            
-            
-            <?php
-			# level admin
+				echo anchor('weighing/outgoing/add','BTB Baru', 'class="btn btn-default"');
+				
+				echo anchor('cashier/payment','NPJG Baru', 'class="btn btn-default"'); 
+				echo anchor('harian/incoming','LPKH Incoming', 'class="btn btn-default"');
+				echo anchor('harian/outgoing','LPKH Outgoing', 'class="btn btn-default"');
+				
+				echo anchor('incoming/add_manifest_instore','Input SMU Barang Gudang', 'class="btn btn-default"'); 
+				echo anchor('incoming/form_create_btb','Create BTB Incoming', 'class="btn btn-default"'); 
+				echo anchor('incoming/search_btb','Search Incoming SMU', 'class="btn btn-default"'); 
+				
+				echo anchor('login/register','Register User', 'class="btn btn-default"');   
 			}
 			?>
             
@@ -170,22 +107,15 @@
             
 			<?php
 			#session_start();
-			
-			if (!$this->session->userdata('logged_in'))
+			$session_data = $this->session->userdata('logged_in');
+			if ($this->session->userdata('logged_in'))
 			{
-			?>
-				<td><?php echo anchor('login','Login'); ?></td>
-			<?php
+			 	echo anchor('login/logout','Logout', 'class="btn btn-default"'); 
 			}
 			else
 			{
-			?>
-				<td><?php echo anchor('login/logout','Logout'); ?></td>
-			<?php
+				echo anchor('login','Login', 'class="btn btn-default"'); 
 			}
 			?>
-        </tr>
         
-    </table>
-	
-</div>
+</div>	

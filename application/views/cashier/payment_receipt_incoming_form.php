@@ -137,10 +137,13 @@ document.getElementById("total").value = tsg;
 				<tr>
 					<td></td><td>
 					<?php if($row->in_status_bayar == 'no')
-						{ echo form_submit('submit', 'SAVE & PRINT' , 'class="btn btn-primary"'); }
-						else if($row->in_status_bayar == 'yes'){
+						{ 
+							echo form_submit('submit', 'SAVE & PRINT' , 'class="btn btn-primary"'); 
+						}
+						elseif($row->in_status_bayar == 'yes')
+						{
 							echo form_submit('submit', 'PRINT ULANG' , 'class="btn btn-primary"');
-							
+							echo "&nbsp; &nbsp;";
 							echo anchor('cashier/payment/void_dbi/'.$row->in_btb,'VOID');
 						}?>
 </td>

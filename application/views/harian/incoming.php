@@ -1,6 +1,6 @@
 <div id="content">
 	<?php echo form_open('harian/incoming_result'); ?>
-   <h5>Laporan Penjualan Harian Incoming</h5>
+   <h2>Laporan Penjualan Kas Harian Incoming</h2>
       <table>
 		
         <tr>
@@ -18,7 +18,7 @@
         
         <tr>
         	<td>&nbsp;</td>
-            <td><input type='submit' value='Print' class="btn btn-default"></td>
+            <td><input type='submit' value='Print' class="btn btn-primary"></td>
         </tr>
 		
       </table>

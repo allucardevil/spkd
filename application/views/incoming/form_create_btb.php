@@ -27,7 +27,7 @@
 						?>
 					</tdx>
 				</tr>
-				<tr><td>Airline</td><td>:</td><td><input type="text" name="airline" value="<?php echo strtoupper($row->inb_airlines); ?>"></td></tr>
+				<tr><td>Airline</td><td>:</td><td><input type="text" name="airline" value="<?php echo strtoupper($row->inb_airlines); ?>" readonly="readonly"></td></tr>
 				<tr><td>Asal</td><td>:</td><td><input type="text" name="asal" value="CGK"></td></tr>
 				<tr><td>Tujuan</td><td>:</td><td><input type="text" name="tujuan" value="KNO"></td></tr>
 				<tr><td>SMU</td><td>:</td><td><input type="text" name="smu" value="<?php echo $row->inb_no_smu; ?>" readonly="readonly"></td></tr>
@@ -46,8 +46,8 @@
 					</td>
 				</tr>
 				<tr><td>No Flight</td><td>:</td><td><input type="text" name="noflight" value="<?php echo $row->inb_flight_number?>"></td></tr>
-				<tr><td>Koli</td><td>:</td><td><input type="text" name="koli" value="<?php echo $row->inb_koli;?>"></td></tr>
-				<tr><td>Berat Aktual</td><td>:</td><td><input type="text" name="berataktual" value="<?php echo $row->inb_berat_aktual;?>"></td></tr>
+				<tr><td>Koli</td><td>:</td><td><input type="text" name="koli" value="<?php echo $row->inb_koli;?>" readonly="readonly"></td></tr>
+				<tr><td>Berat Aktual</td><td>:</td><td><input type="text" name="berataktual" value="<?php echo $row->inb_berat_aktual;?>" readonly="readonly"></td></tr>
 				<tr><td>Berat Volume</td><td>:</td>
 					<td>
 						<input type="text" name="beratvolume" value="<?php echo $row->inb_berat_volume;?>">

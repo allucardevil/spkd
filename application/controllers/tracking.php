@@ -40,6 +40,7 @@ class Tracking extends CI_Controller {
 		$this->load->model('tracking_model');
 		$no_btb = $this->input->post('no_btb');
 		$type = $this->input->post('type');
+		$data['type'] = $type;
 		
 		$data['query'] = $this->tracking_model->btb($no_btb, $type);
 		
@@ -63,6 +64,7 @@ class Tracking extends CI_Controller {
 		$this->load->model('tracking_model');
 		$no_smu = $this->input->post('no_smu');
 		$type = $this->input->post('type');
+		$data['type'] = $type;
 		
 		$data['query'] = $this->tracking_model->smu($no_smu, $type);
 		

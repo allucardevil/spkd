@@ -28,6 +28,7 @@ class Incoming extends CI_Controller {
 	{
 		$this->load->model('incoming_model');
 		$smu = $this->uri->segment(3);
+		
 		$data['result'] = $this->incoming_model->get_data_inbreakdown($smu);	
 		$this->load->view('template/header');
 		$this->load->view('template/breadcumb');
@@ -53,7 +54,7 @@ class Incoming extends CI_Controller {
 			$smu = $incoming[1];
 			$koli = $incoming[2];
 			$berat = $incoming[3];
-			
+			$status = 'instore';
 			
 			# call model
 			$this->load->model('incoming_model');
@@ -67,7 +68,7 @@ class Incoming extends CI_Controller {
 			{
 				# success
 				$this->load->model('incoming_model');
-				$this->incoming_model->insert_data_in_breakdown($airlines,$smu,$koli,$berat,'instore');
+				$this->incoming_model->insert_data_in_breakdown($airlines,$smu,$koli,$berat,$status);
 				
 				redirect('incoming/add_manifest_instore/'.$smu.'/success');
 			}
@@ -90,7 +91,7 @@ class Incoming extends CI_Controller {
 	
 	public function insert_manifest_outstore()
 	{
-		if(substr_count($this->input->post('incoming') , '/') !== 3 )
+		if(substr_count($this->input->post('incoming') , '/') !== 4 )
 		{	
 			# fail format input, redirect to form add
 			redirect('incoming/add_manifest_outstore/error');
@@ -102,10 +103,12 @@ class Incoming extends CI_Controller {
 			
 			// pemberian nilai variabel
 			$airlines = $incoming[0];
-			$smu = $incoming[1];
-			$koli = $incoming[2];
-			$berat = $incoming[3];
-			
+			$flt = $incoming[1];
+			$smu = $incoming[2];
+			$koli = $incoming[3];
+			$berat = $incoming[4];
+			$status = 'outstore';
+			$date = mdate("%Y-%m-%d", time());
 			# call model
 			$this->load->model('incoming_model');
 			
@@ -118,7 +121,7 @@ class Incoming extends CI_Controller {
 			{
 				# success
 				$this->load->model('incoming_model');
-				$this->incoming_model->insert_data_in_breakdown($airlines,$smu,$koli,$berat);
+				$this->incoming_model->insert_data_in_breakdown_outstore($airlines,$flt,$smu,$koli,$berat,$status, $date);
 				
 				redirect('incoming/add_manifest_outstore/'.$smu.'/success');
 			}
@@ -157,6 +160,7 @@ class Incoming extends CI_Controller {
 	{
 		$smu = $this->input->post('smu');
 		$this->load->model('incoming_model');
+		
 		$id_breakdown = $this->incoming_model->get_id_breakdown($smu);
 		redirect('incoming/form_create_btb/'.$id_breakdown);
 	}
@@ -241,7 +245,7 @@ class Incoming extends CI_Controller {
 		$smu = $this->uri->segment(3);
 		$this->load->model('incoming_model');
 		$data['result'] = $this->incoming_model->get_data_breakdown($smu);
-		
+		#print_r($data);
 		$this->load->view('template/header');
 		$this->load->view('template/breadcumb');
 		$this->load->view('incoming/menu');
@@ -257,7 +261,7 @@ class Incoming extends CI_Controller {
 	
 	public function void_breakdown()
 	{
-		$inb_id = $this->uri->segment(3);
+		$inb_id = $this->uri->segment(3,0);
 		$this->load->model('incoming_model');
 		$this->incoming_model->update_status_void_breakdown($inb_id);
 		redirect('incoming');
@@ -265,7 +269,7 @@ class Incoming extends CI_Controller {
 	
 	public function void_breakdown_btb()
 	{
-		$inb_id = $this->uri->segment(3);
+		$inb_id = $this->uri->segment(3,0);
 		$this->load->model('incoming_model');
 		$this->incoming_model->update_status_void_breakdown($inb_id);
 		redirect('incoming');

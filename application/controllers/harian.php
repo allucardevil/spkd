@@ -92,48 +92,85 @@ class Harian extends CI_Controller {
 		$airline = $this->input->post('airline');
 		$data['airline'] = $airline;
 		
+		# redirect model due database change on 01-08-2013
+		if($date < '2013-08-02')
+		{
+			$data_type = 'v2';
+		}
+		else
+		{
+			$data_type = 'v3';
+		}
+		
 		$this->load->model('harian_model');
-		$data['details'] = $this->harian_model->details_incoming($date, $airline);
-		$data['total'] = $this->harian_model->get_total_incoming($date, $airline);
+		$data['details'] = $this->harian_model->details_incoming($date, $airline, $data_type);
+		#$data['total'] = $this->harian_model->get_total_incoming($date, $airline);
 		
 		#print_r($data);
 		
-		$this->load->view('template/header');
-		$this->load->view('template/breadcumb');
-		$this->load->view('harian/details_incoming', $data);
-		$this->load->view('template/footer');
+		if($data_type == 'v2')
+		{
+			$this->load->view('template/header');
+			$this->load->view('template/breadcumb');
+			$this->load->view('harian/details_incoming', $data);
+			$this->load->view('template/footer');
+		}
+		else
+		{
+			$this->load->view('template/header');
+			$this->load->view('template/breadcumb');
+			$this->load->view('harian/v3_details_incoming', $data);
+			$this->load->view('template/footer');
+		}
 
 	}
 	
 	public function incoming_pdf()
 	{
-    $date = $this->uri->segment(4, mdate("%Y-%m-%d", time()));
-    $data['date'] = $date;
-    $airline = $this->uri->segment(3, 'ga');
-    $data['airline'] = $airline;
+		$date = $this->uri->segment(4, mdate("%Y-%m-%d", time()));
+		$data['date'] = $date;
+		$airline = $this->uri->segment(3, 'ga');
+		$data['airline'] = $airline;
     
-    $this->load->model('harian_model');
-    $data['details'] = $this->harian_model->details_incoming($date, $airline);
-    $data['total'] = $this->harian_model->get_total_incoming($date, $airline);
+	# redirect model due database change on 01-08-2013
+		if($date < '2013-08-02')
+		{
+			$data_type = 'v2';
+		}
+		else
+		{
+			$data_type = 'v3';
+		}
+	
+		$this->load->model('harian_model');
+		$data['details'] = $this->harian_model->details_incoming($date, $airline, $data_type);
+		$data['total'] = $this->harian_model->get_total_incoming($date, $airline);
+		
+	   /*$this->load->view('template/header');
+		$this->load->view('template/breadcumb');
+		$this->load->view('harian/details', $data);
+		$this->load->view('template/footer');*/
     
-   /*$this->load->view('template/header');
-    $this->load->view('template/breadcumb');
-    $this->load->view('harian/details', $data);
-    $this->load->view('template/footer');*/
+    	$this->load->helper('sigap_pdf');
     
-    $this->load->helper('sigap_pdf');
-    #$this->load->view('cashier/pdf/print_dbi',$data);
+		# PDF Maker
+		$stream = TRUE; 
+		$papersize = 'legal'; 
+		$orientation = 'landscape';
+		$filename = 'lpkh-incoming-'.$airline.'-'.$date;
+		$stn = $this->input->post('hs_service_site');
     
-    //PDF Maker
-    $stream = TRUE; 
-    $papersize = 'legal'; 
-    $orientation = 'landscape';
-    $filename = 'lpkh-incoming-'.$airline.'-'.$date;
-	$stn = $this->input->post('hs_service_site');
-    #$this->load->view('harian/details', $data);
-    $html = $this->load->view('harian/details_pdf_incoming',$data, true); 
-    pdf_create($html, $filename, $stream, $papersize, $orientation, $stn);
-    $full_filename = $filename . '.pdf';
+			if($data_type == 'v2')
+			{
+				$html = $this->load->view('harian/details_pdf_incoming',$data, true); 
+			}
+			else
+			{
+				$html = $this->load->view('harian/v3_details_pdf_incoming',$data, true); 
+			}
+		
+		pdf_create($html, $filename, $stream, $papersize, $orientation, $stn);
+		$full_filename = $filename . '.pdf';		
 	}
 }
 

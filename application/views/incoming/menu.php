@@ -1,12 +1,8 @@
 <div id="content">
-	<table>
-    	<tr>
-            <!--- incoming --->
-            <td><?php echo anchor('incoming/add_manifest_instore','Input SMU Barang Gudang'); ?></td>
-            <td><?php echo anchor('incoming/form_create_btb','Create BTB Incoming'); ?></td>
-            <td><?php echo anchor('incoming/search_btb','Search Incoming SMU'); ?></td>
-            <!--- incoming --->
-		</tr>
-        
-    </table>
+	<div class="btn-group btn-group-justified">
+	<?php echo anchor('incoming/add_manifest_instore','Input SMU Barang Sudah Tiba', 'class="btn btn-default"'); ?>
+    <?php echo anchor('incoming/add_manifest_outstore','Input SMU Barang Belum Tiba', 'class="btn btn-default"'); ?>
+    <?php echo anchor('incoming/form_create_btb','Buat BTB Baru', 'class="btn btn-default"'); ?>
+    <?php echo anchor('incoming/search_btb','Pencarian SMU', 'class="btn btn-default"'); ?>
+    </div>
 </div>

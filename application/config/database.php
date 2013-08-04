@@ -50,8 +50,8 @@ $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
-$db['default']['password'] = 'ngantukberat';
-$db['default']['database'] = 'wms_kno';
+$db['default']['password'] = '';
+$db['default']['database'] = 'wmskno2_030813';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

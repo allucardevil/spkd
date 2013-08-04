@@ -10,7 +10,7 @@
         <td> : <input type='password' name='password'></td>
   	  </tr>
       <tr>
-      	<td colspan=2><input type='submit' value='Login'></td>
+      	<td colspan=2><input type='submit' value='Login' class="btn btn-primary"></td>
       </tr>
       </table>
       <?php echo form_close(); ?>

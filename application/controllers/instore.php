@@ -2,13 +2,7 @@
 
 class Instore extends CI_Controller {
 
-	Public function index()
-	{
-		redirect('instore/list_smu_instore');
-	}
-	
-	# list smu marquee
-	public function list_smu_instore()
+	public function index()
 	{
 		$this->load->model('incoming_model');
 		$data['result'] = $this->incoming_model->get_list_smu_instore();

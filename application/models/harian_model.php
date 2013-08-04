@@ -52,7 +52,7 @@ class Harian_model extends CI_Model {
 		 
 	 }
 	 
-	 public function details_incoming($date, $airline)
+	 public function details_incoming($date, $airline, $data_type)
 	 {
 		/*$this->db->where('DATE(manifestin.tglmanifest)', $date);
 		$this->db->where('airline', $airline);
@@ -63,16 +63,28 @@ class Harian_model extends CI_Model {
 		$this->db->or_where('manifestin.isvoid',0);
 		$query = $this->db->get('manifestin');
 		return $query->result();*/
-		$query = ("
-		SELECT * FROM deliverybill as db
-		JOIN ( SELECT * from isimanifestin ) as isi  ON isi.no_smu = db.nosmu
-		JOIN ( SELECT * from manifestin WHERE airline = '" . $airline . "' ) as mani ON mani.id_manifestin = isi.id_manifestin
-		JOIN ( SELECT * from in_dtbarang WHERE in_status_bayar = 'y' ) as indt ON indt.in_btb = db.no_smubtb
-		WHERE db.isvoid = 0
-		AND DATE(db.tglbayar) = '" . $date . "'
-		AND db.status = 0
-	
-		");
+		/**/
+		if($data_type == 'v2')
+		{
+			$query = ("
+			SELECT * FROM deliverybill as db
+			JOIN ( SELECT * from isimanifestin ) as isi  ON isi.no_smu = db.nosmu
+			JOIN ( SELECT * from manifestin WHERE airline = '" . $airline . "' ) as mani ON mani.id_manifestin = isi.id_manifestin
+			WHERE db.isvoid = 0
+			AND DATE(db.tglbayar) = '" . $date . "'
+			AND db.status = 0
+			");
+		}
+		else
+		{
+			$query = ("
+			SELECT * FROM deliverybill as db
+			JOIN ( SELECT * from in_dtbarang WHERE in_airline = '" . $airline . "' AND in_status_bayar = 'yes' ) as indt ON indt.in_btb = db.no_smubtb
+			WHERE db.isvoid = 0
+			AND DATE(db.tglbayar) = '" . $date . "'
+			AND db.status = 0
+			");
+		}
 		
 		$query = $this->db->query($query);
 		return $query->result();

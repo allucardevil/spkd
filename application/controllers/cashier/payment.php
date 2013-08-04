@@ -33,6 +33,7 @@ class Payment extends CI_Controller {
 		#view call
 		$this->load->view('template/header');
 		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
 		$this->load->view('cashier/add_payment_receipt_form');
 		$this->load->view('template/footer');
 	}
@@ -162,6 +163,7 @@ class Payment extends CI_Controller {
 		#View Call
 		$this->load->view('template/spk_header');
 		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
 		$this->load->view('cashier/payment_receipt_outgoing_form',$data);
 		$this->load->view('template/footer');
 	}
@@ -246,6 +248,7 @@ class Payment extends CI_Controller {
 		#view call
 		$this->load->view('template/spk_header');;
 		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
 		$this->load->view('cashier/payment_receipt_incoming_form',$data);
 		$this->load->view('template/footer');
 	}
@@ -298,6 +301,7 @@ class Payment extends CI_Controller {
 		#View Call
 		$this->load->view('template/header');
 		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
 		if($this->input->post('type') == 0)
 		{
 			$this->load->view('cashier/print_bti', $print);
@@ -368,6 +372,7 @@ class Payment extends CI_Controller {
 		#View Call
 		$this->load->view('template/header');
 		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
 		$this->load->view('cashier/reprint_db', $data);
 		$this->load->view('template/footer');
 	
@@ -439,6 +444,7 @@ class Payment extends CI_Controller {
 		#View Call
 		$this->load->view('template/header');
 		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
 		$this->load->view('cashier/void_reason_dbi', $data);
 		$this->load->view('template/footer');
 	}
@@ -464,6 +470,7 @@ class Payment extends CI_Controller {
 		#View Call
 		$this->load->view('template/header');
 		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
 		$this->load->view('cashier/void_reason_dbo', $data);
 		$this->load->view('template/footer');
 	}
@@ -480,6 +487,33 @@ class Payment extends CI_Controller {
 		$this->cashier->do_void_dbo($no_btb, $user);
 		
 		redirect('cashier/payment');
+	}
+	
+	function my_balance()
+	{
+		# incoming
+		$user = $this->session->userdata('logged_in');
+		$user = $user['id_user'];
+		$date = mdate("%Y-%m-%d", time());
+		$data['user'] = $user;
+		
+		#model call
+		$this->load->model('cashier');
+		$data['query'] = $this->cashier->my_balance_incoming($user, $date);
+		
+		#print_r($data);
+		
+		$this->load->view('template/header');
+		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
+		$this->load->view('cashier/my_balance_incoming', $data);
+		$this->load->view('template/footer');
+		
+		# void incoming
+		
+		# outgoing
+		
+		# void outgoing
 	}
 }
 

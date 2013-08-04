@@ -354,6 +354,7 @@ class Incoming_model extends CI_Model {
 		$query = $this->db->query($query);
 		return $query->result();
 	}
+	
 	public function insert_data_in_breakdown($airlines,$smu,$koli,$berat,$status)
 	{
 		$data = array(
@@ -365,6 +366,21 @@ class Incoming_model extends CI_Model {
 			);
 		$this->db->insert('in_breakdown',$data);
 	}
+	
+	public function insert_data_in_breakdown_outstore($airlines,$flt, $smu,$koli,$berat,$status, $date)
+	{
+		$data = array(
+				"inb_airlines"	=> $airlines,
+				"inb_flight_number" => $flt,
+				"inb_flight_date" => $date,
+				"inb_no_smu"	=> $smu,
+				"inb_koli"	=> $koli,
+				"inb_berat_aktual"	=> $berat,
+				"inb_status_gudang"	=>	$status,
+			);
+		$this->db->insert('in_breakdown',$data);
+	}
+	
 	public function get_data_in_breakdown_by_id($id)
 	{
 		$query ="	SELECT * FROM in_breakdown 
@@ -412,8 +428,10 @@ class Incoming_model extends CI_Model {
 	}
 	public function get_data_breakdown($smu)
 	{
-		$query = "	SELECT * FROM in_dtbarang 
-					WHERE in_smu = '$smu'
+		$query = "	
+			SELECT * FROM in_dtbarang 
+			LEFT JOIN in_breakdown ON inb_no_smu = in_smu
+			WHERE in_smu = '$smu'
 				";
 		$query = $this->db->query($query);
 		return	$query->result();
@@ -425,8 +443,9 @@ class Incoming_model extends CI_Model {
 	}
 	public function get_data_inbreakdown_btb_by_date($date)
 	{
-		$query ="	SELECT * FROM in_breakdown 
-					LEFT JOIN in_dtbarang ON in_breakdown.inb_no_smu = in_dtbarang.in_smu  
+		$query ="	
+					SELECT * FROM in_breakdown 
+					LEFT JOIN in_dtbarang ON inb_no_smu = in_smu  
 					WHERE in_tgl_manifest='$date'
 					ORDER BY inb_id DESC
 					";
@@ -435,8 +454,13 @@ class Incoming_model extends CI_Model {
 	}
 	public function get_list_smu_instore()
 	{
-		$query ="	SELECT * FROM in_breakdown
-					WHERE inb_status_gudang = 'instore'
+		$query ="	
+		
+		SELECT * FROM in_breakdown as bd
+		LEFT JOIN ( SELECT * from in_dtbarang WHERE in_status_bayar = 'no' ) as isi  ON isi.in_smu = bd.inb_no_smu
+		WHERE inb_status_gudang = 'instore'
+		AND inb_status_void = 'no'
+		
 				";
 		$query = $this->db->query($query);
 		return $query->result();
