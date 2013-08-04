@@ -41,7 +41,7 @@ class Payment extends CI_Controller {
 	public function do_search_receipt()
 	{
 		#load model
-		$this->load->model('cashier');
+		$this->load->model('cashier_model');
 		
 		#form validation
 		//$this->form_validation->set_rules('btb_no', 'btb_no', 'required');
@@ -54,8 +54,8 @@ class Payment extends CI_Controller {
 		} //else
 		{
 			$search = $this->input->post('btb_no');
-			$data['outgoing'] = $this->cashier->payment_receipt_outgoing($search);
-			$data['incoming'] = $this->cashier->payment_receipt_incoming($search);
+			$data['outgoing'] = $this->cashier_model->payment_receipt_outgoing($search);
+			$data['incoming'] = $this->cashier_model->payment_receipt_incoming($search);
 			
 			$outgoing = 0;
 			$incoming = 0;
@@ -89,13 +89,13 @@ class Payment extends CI_Controller {
 	public function payment_receipt_outgoing($search)
 	{		
 		#prepare var
-		$data['payment_type']= $this->cashier->get_all_payment_type();
+		$data['payment_type']= $this->cashier_model->get_all_payment_type();
 		$today = date('Y-m-d');
 		
 		foreach ($search as $row)
 		{
-			$hargasewa = $this->cashier->get_harga_sewa($row->btb_agent,'outgoing');
-			$harga_non_agent = $this->cashier->get_harga_sewa_non_agent('outgoing');
+			$hargasewa = $this->cashier_model->get_harga_sewa($row->btb_agent,'outgoing');
+			$harga_non_agent = $this->cashier_model->get_harga_sewa_non_agent('outgoing');
 			$data['totalberat'] = $row->btb_totalberat;
 			$hari = mdate('%Y-%m-%d',strtotime($row->btb_date));
 		}
@@ -172,13 +172,13 @@ class Payment extends CI_Controller {
 	{
 		#sidebar data
 		#prepare var
-		$data['payment_type']= $this->cashier->get_all_payment_type();
+		$data['payment_type']= $this->cashier_model->get_all_payment_type();
 		$today = date('Y-m-d');
 		
 		foreach ($search as $row)
 		{
-			$hargasewa = $this->cashier->get_harga_sewa($row->in_agent,'incoming');
-			$harga_non_agent = $this->cashier->get_harga_sewa_non_agent('incoming');
+			$hargasewa = $this->cashier_model->get_harga_sewa($row->in_agent,'incoming');
+			$harga_non_agent = $this->cashier_model->get_harga_sewa_non_agent('incoming');
 			$data['totalberat'] = $row->in_berat_datang;
 			$hari = mdate('%Y-%m-%d',strtotime($row->in_tgl_manifest));
 		}
@@ -255,15 +255,15 @@ class Payment extends CI_Controller {
 	
 	public function save_payment()
 	{
-		$this->load->model('cashier');
+		$this->load->model('cashier_model');
 		
 		# get user data
 		$user = $this->session->userdata('logged_in');
 		$user = $user['id_user'];
-		$no_db = $this->cashier->get_last_db();
+		$no_db = $this->cashier_model->get_last_db();
 		if($this->input->post('agent') <> 'POS INDONESIA')
 		{
-			$no_faktur = $this->cashier->get_last_faktur();
+			$no_faktur = $this->cashier_model->get_last_faktur();
 		} else {$no_faktur = '';}
 		
 		# data preparing
@@ -296,7 +296,7 @@ class Payment extends CI_Controller {
 				'minimum_weight' => $this->input->post('minw'),
 			);
 		
-		$this->cashier->save_db($data);
+		$this->cashier_model->save_db($data);
 		
 		#View Call
 		$this->load->view('template/header');
@@ -305,12 +305,12 @@ class Payment extends CI_Controller {
 		if($this->input->post('type') == 0)
 		{
 			$this->load->view('cashier/print_bti', $print);
-			$this->cashier->update_in_dtbarang($this->input->post('btb_no'));
-			$this->cashier->update_in_dtbarang_berat($this->input->post('btb_no'), $this->input->post('berat_bayar'));
+			$this->cashier_model->update_in_dtbarang($this->input->post('btb_no'));
+			$this->cashier_model->update_in_dtbarang_berat($this->input->post('btb_no'), $this->input->post('berat_bayar'));
 		} else if ($this->input->post('type') == 1){
 			$this->load->view('cashier/print_bto',$print);
-			$this->cashier->update_out_dtbarang_h($this->input->post('btb_no'));
-			$this->cashier->update_out_dtbarang_h_berat($this->input->post('btb_no'), $this->input->post('berat_bayar'));
+			$this->cashier_model->update_out_dtbarang_h($this->input->post('btb_no'));
+			$this->cashier_model->update_out_dtbarang_h_berat($this->input->post('btb_no'), $this->input->post('berat_bayar'));
 		}
 		$this->load->view('template/footer');
 		//redirect('cashier/payment/new_receipt'); 
@@ -319,18 +319,18 @@ class Payment extends CI_Controller {
 	public function print_db()
 	{
 		#model call
-		$this->load->model('cashier');
+		$this->load->model('cashier_model');
 		$this->load->helper('terbilang');
 		
 		$devbil = $this->uri->segment(4);
 	
-		$devbill_out = $this->cashier->get_dev_bill_out_detail($devbil);
-		$devbill_in = $this->cashier->get_dev_bill_in_detail($devbil);
+		$devbill_out = $this->cashier_model->get_dev_bill_out_detail($devbil);
+		$devbill_in = $this->cashier_model->get_dev_bill_in_detail($devbil);
 		if ( $devbill_out != NULL) {
-			$data['dev_bill'] = $this->cashier->get_dev_bill_out_detail($devbil);
+			$data['dev_bill'] = $this->cashier_model->get_dev_bill_out_detail($devbil);
 			$set = $data['dev_bill'];
 		} else if ($devbill_in != NULL) {
-			$data['dev_bill'] = $this->cashier->get_dev_bill_in_detail($devbil);
+			$data['dev_bill'] = $this->cashier_model->get_dev_bill_in_detail($devbil);
 			$set = $data['dev_bill'];
 		}
 		
@@ -342,8 +342,8 @@ class Payment extends CI_Controller {
 			$no_btb = $row->no_smubtb;
 		}
 		
-		$this->cashier->update_status_print($devbill);
-		$this->cashier->update_status_dbo($no_btb);
+		$this->cashier_model->update_status_print($devbill);
+		$this->cashier_model->update_status_dbo($no_btb);
 		
 		# Helper Load
 		$this->load->helper('sigap_pdf');
@@ -380,23 +380,23 @@ class Payment extends CI_Controller {
 	public function do_reprint_db()
 	{
 		#model call
-		$this->load->model('cashier');
+		$this->load->model('cashier_model');
 		$this->load->helper('terbilang');
 		
 		$no_btb = $this->uri->segment(4);
 		
-		$no_db = $this->cashier->get_nodb($no_btb);
+		$no_db = $this->cashier_model->get_nodb($no_btb);
 		foreach ($no_db as $row)
 		{
 			$no_db = $row->nodb;
 		}
-		$devbill_out = $this->cashier->get_dev_bill_out_detail($no_db);
-		$devbill_in = $this->cashier->get_dev_bill_in_detail($no_db);
+		$devbill_out = $this->cashier_model->get_dev_bill_out_detail($no_db);
+		$devbill_in = $this->cashier_model->get_dev_bill_in_detail($no_db);
 		if ( $devbill_out != NULL) {
-			$data['dev_bill'] = $this->cashier->get_dev_bill_out_detail($no_db);
+			$data['dev_bill'] = $this->cashier_model->get_dev_bill_out_detail($no_db);
 			$set = $data['dev_bill'];
 		} else if ($devbill_in != NULL) {
-			$data['dev_bill'] = $this->cashier->get_dev_bill_in_detail($no_db);
+			$data['dev_bill'] = $this->cashier_model->get_dev_bill_in_detail($no_db);
 			$set = $data['dev_bill'];
 		}
 		
@@ -408,13 +408,13 @@ class Payment extends CI_Controller {
 			$no_btb = $row->no_smubtb;
 		}
 		
-		$this->cashier->update_status_print($devbill);
-		$this->cashier->update_status_dbo($no_btb);
+		$this->cashier_model->update_status_print($devbill);
+		$this->cashier_model->update_status_dbo($no_btb);
 		# Helper Load
 		$this->load->helper('sigap_pdf');
 		$this->load->view('cashier/pdf/print_dbi',$data);
 		
-		//PDF Maker
+		# PDF Maker
 		$stream = TRUE; 
 		$papersize = 'legal'; 
 		$orientation = 'potrait';
@@ -436,10 +436,10 @@ class Payment extends CI_Controller {
 	public function void_dbi()
 	{
 		#model call
-		$this->load->model('cashier');
+		$this->load->model('cashier_model');
 		
 		$data['no_btb'] = $this->uri->segment(4);
-		$data['cek_barang'] = $this->cashier->cek_barang_instore($data['no_btb']);
+		$data['cek_barang'] = $this->cashier_model->cek_barang_instore($data['no_btb']);
 		
 		#View Call
 		$this->load->view('template/header');
@@ -452,13 +452,13 @@ class Payment extends CI_Controller {
 	function do_void_dbi()
 	{
 		#model call
-		$this->load->model('cashier');
+		$this->load->model('cashier_model');
 		
 		$user = $this->session->userdata('logged_in');
 		$user = $user['id_user'];
 		$no_btb = $this->uri->segment(4);
 		
-		$this->cashier->do_void_dbi($no_btb, $user);
+		$this->cashier_model->do_void_dbi($no_btb, $user);
 		
 		redirect('cashier/payment');
 	}
@@ -478,13 +478,13 @@ class Payment extends CI_Controller {
 	function do_void_dbo()
 	{
 		#model call
-		$this->load->model('cashier');
+		$this->load->model('cashier_model');
 		
 		$user = $this->session->userdata('logged_in');
 		$user = $user['id_user'];
 		$no_btb = $this->uri->segment(4);
 		
-		$this->cashier->do_void_dbo($no_btb, $user);
+		$this->cashier_model->do_void_dbo($no_btb, $user);
 		
 		redirect('cashier/payment');
 	}
@@ -498,23 +498,78 @@ class Payment extends CI_Controller {
 		$data['user'] = $user;
 		
 		#model call
-		$this->load->model('cashier');
-		$data['query'] = $this->cashier->my_balance_incoming($user, $date);
-		
-		#print_r($data);
+		$this->load->model('cashier_model');
+		$data['query'] = $this->cashier_model->my_balance($user, $date);
 		
 		$this->load->view('template/header');
 		$this->load->view('template/breadcumb');
 		#$this->load->view('cashier/menu');
 		$this->load->view('cashier/my_balance_incoming', $data);
 		$this->load->view('template/footer');
-		
-		# void incoming
-		
-		# outgoing
-		
-		# void outgoing
 	}
+	
+	function summary()
+	{
+		$this->load->view('template/header');
+		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
+		$this->load->view('cashier/summary');
+		$this->load->view('template/footer');
+	}
+	
+	
+	function summary_result()
+	{
+		$date = mdate('%Y-%m-%d', strtotime($this->input->post('date')));
+		$data['date']=$date;
+		
+		#model call
+		$this->load->model('cashier_model');
+		$data['incoming'] = $this->cashier_model->incoming_summary_income($date);
+		$data['outgoing'] = $this->cashier_model->outgoing_summary_income($date);
+		
+		
+		$this->load->view('template/header');
+		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
+		$this->load->view('cashier/summary_result', $data);
+		$this->load->view('template/footer');
+	}
+	
+	
+	function pdf_summary_result()
+	{
+		$date = mdate('%Y-%m-%d', strtotime($this->uri->segment(4)));
+		$data['date']=$date;
+		
+		#model call
+		$this->load->model('cashier_model');
+		$data['incoming'] = $this->cashier_model->incoming_summary_income($date);
+		$data['outgoing'] = $this->cashier_model->outgoing_summary_income($date);
+		
+		
+		/*$this->load->view('template/header');
+		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
+		$this->load->view('cashier/summary_result', $data);
+		$this->load->view('template/footer');*/
+		# Helper Load
+		$this->load->helper('sigap_pdf');
+		#$this->load->view('cashier/pdf/print_dbi',$data);
+		
+		# PDF Maker
+		$stream = TRUE; 
+		$papersize = 'legal'; 
+		$orientation = 'potrait';
+		$filename = 'summary-'.$date;
+		$stn = 'kno';
+		$html = '';
+		$html = $this->load->view('cashier/pdf/pdf_summary_result', $data, true);
+     	pdf_create($html, $filename, $stream, $papersize, $orientation, $stn);
+		$full_filename = $filename . '.pdf';
+		
+	}
+	
 }
 
 /* End of file payment.php */

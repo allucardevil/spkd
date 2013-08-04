@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Hospitality Service Traveller Detail | PT Gapura Angkasa Denpasar</title>
+<title>PT Gapura Angkasa Kualanamu | Warehouse Management System</title>
 <style type="text/css">
 html{
 	margin:15px;

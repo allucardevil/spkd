@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Cashier extends CI_Model {
+class Cashier_model extends CI_Model {
 
 	/**
 	 * PT Gapura Angkasa
@@ -10,7 +10,7 @@ class Cashier extends CI_Model {
 	 * App id :
 	 * App code :
 	 *
-	 * airline model
+	 * cashier model
 	 *
 	 * url : http://dom.kno.wms.gapura.co.id/
 	 * design : SIGAP Team
@@ -269,26 +269,47 @@ class Cashier extends CI_Model {
 		$this->db->update('deliverybill', array('isvoid'=>'1', 'keterangan'=>$this->input->post('reason'),'voidby'=>$user), array('no_smubtb'=>$no_btb));
 	 }
 	 
-	 public function my_balance_incoming($user, $date)
+	 public function my_balance($user, $date)
 	 {
 		 $query = ("
 		 SELECT * FROM `deliverybill`
 		 JOIN  in_dtbarang ON in_btb = no_smubtb
 			WHERE `user` = '" . $user . "' 
 			AND DATE(`tglbayar`) = '" . $date . "' 
-			
 			AND `isvoid` = 0
 		");
-		 
-		 #$this->db->where('user', $user);
-		 #$this->db->where('DATE(tglbayar)', $date);
-		 #$this->db->where('status', 1);
-		 #$this->db->where('isvoid', 1);
-		 #$this->db->from('deliverybill');
+		 $query = $this->db->query($query);
+		return $query->result();
+	 }
+	 
+	 public function incoming_summary_income($date)
+	 {
+		 $query = ("
+		 SELECT *, SUM(sewagudang) as whc, SUM(cargo_charge) as csc, SUM(ppn) as ppn, SUM(administrasi) as adm, SUM(total_biaya) as totbiaya FROM deliverybill as db
+		JOIN ( SELECT * from in_dtbarang WHERE in_status_bayar = 'yes' ) as indt ON indt.in_btb = db.no_smubtb
+		WHERE db.isvoid = 0
+		AND DATE(db.tglbayar) = '" . $date . "'
+		AND db.status = 0
+		GROUP BY indt.in_airline
+	    ");
+		 $query = $this->db->query($query);
+		return $query->result();
+	 }
+	 
+	 public function outgoing_summary_income($date)
+	 {
+		 $query = ("
+		 SELECT *, SUM(sewagudang) as whc, SUM(cargo_charge) as csc, SUM(ppn) as ppn, SUM(administrasi) as adm, SUM(total_biaya) as totbiaya FROM deliverybill as db
+		JOIN ( SELECT * from out_dtbarang_h WHERE status_bayar = 'yes' ) as outdt ON outdt.btb_nobtb = db.no_smubtb
+		WHERE db.isvoid = 0
+		AND DATE(db.tglbayar) = '" . $date . "'
+		AND db.status = 1
+		GROUP BY outdt.airline
+	    ");
 		 $query = $this->db->query($query);
 		return $query->result();
 	 }
 }
 
-/* End of file airline.php */
-/* Location: ./application/models/airline.php */
+/* End of file cashier.php */
+/* Location: ./application/models/cashier.php */
