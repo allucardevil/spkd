@@ -1,7 +1,10 @@
 <div id="content">
+	<h2>Buat BTB baru berdasarkan data SMU yang sudah ada di system</h2>
 	<?php 	echo form_open('incoming/search_form_create_btb');?>
-			<input type="text" name="smu" placeholder="smu">
-			<input type="submit" value="search">
+			<div class="input-append">
+            <input type="text" name="smu" placeholder="masukan no smu">
+			<input type="submit" value="search" class="btn btn-primary">
+            </div>
 	<?php	
 			echo form_close();
 			

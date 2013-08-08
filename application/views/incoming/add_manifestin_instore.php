@@ -1,4 +1,5 @@
 <div id="content">
+<h2>Input data SMU barang yang sudah ada di gudang</h2>
 	<?php echo form_open('incoming/insert_manifest_instore'); ?>
 	  <table>
           <tr>

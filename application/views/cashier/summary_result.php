@@ -4,7 +4,7 @@
                     <table>
                     		<tr>
                             	<td colspan="3" align="center"><strong><?php echo strtoupper(mdate("%d-%M-%Y", strtotime($date))); ?></strong></td>
-                            	<td colspan="6" align="center"><strong>INCOMING SUMMARY INCOME</strong></td>
+                            	<td colspan="6" align="center"><strong>INBOUND SUMMARY INCOME</strong></td>
                             </tr>	
                             <tr>
                             	<td align="center"><strong>Airline</strong></td>
@@ -20,11 +20,11 @@
                     <?php 
 					$tot_koli = 0;
 					$tot_berat = 0;
-					$grand_total = 0;
+					$in_grand_total = 0;
 					foreach($incoming as $items): 	
 					$tot_koli = $tot_koli + $items->in_koli;
 					$tot_berat = $tot_berat +  $items->in_berat_bayar;
-					$grand_total = $grand_total + $items->totbiaya;
+					$in_grand_total = $in_grand_total + $items->totbiaya;
 					?>
     						
                             
@@ -45,7 +45,7 @@
                     
                     		<tr>
                              	<td colspan="8"><strong>GRAND TOTAL</strong></td>
-                                <td><strong><?php echo number_format($grand_total, 0, ',', '.'); ?></strong></td>
+                                <td><strong><?php echo number_format($in_grand_total, 0, ',', '.'); ?></strong></td>
                              </tr>  
                     
                     </table>
@@ -53,7 +53,7 @@
                      <table>
                     		<tr>
                             	<td colspan="3" align="center"><strong><?php echo strtoupper(mdate("%d-%M-%Y", strtotime($date))); ?></strong></td>
-                            	<td colspan="6" align="center"><strong>OUTGOING SUMMARY INCOME</strong></td>
+                            	<td colspan="6" align="center"><strong>OUTBOUND SUMMARY INCOME</strong></td>
                             </tr>	
                            <tr>
                             	<td align="center"><strong>Airline</strong></td>
@@ -69,11 +69,11 @@
                     <?php 
 					$tot_koli = 0;
 					$tot_berat = 0;
-					$grand_total = 0;
+					$out_grand_total = 0;
 					foreach($outgoing as $items): 	
 					$tot_koli = $tot_koli + $items->btb_totalkoli;
 					$tot_berat = $tot_berat +  $items->btb_totalberatbayar;
-					$grand_total = $grand_total + $items->totbiaya;
+					$out_grand_total = $out_grand_total + $items->totbiaya;
 					?>
     						
                             
@@ -94,9 +94,25 @@
                     
                     		<tr>
                              	<td colspan="8"><strong>GRAND TOTAL</strong></td>
-                                <td><strong><?php echo number_format($grand_total, 0, ',', '.'); ?></strong></td>
+                                <td><strong><?php echo number_format($out_grand_total, 0, ',', '.'); ?></strong></td>
                              </tr>  
                     
+                    </table>
+                    
+                    <table>
+                    	<tr>
+                        	<td align="center" colspan="9"><strong>L E G E N D</strong></td>
+                        </tr>
+                    	<tr>
+                        	<td align="center" colspan="3"><strong>Inbound</strong></td>
+                            <td align="center" colspan="3"><strong>Outbound</strong></td>
+                            <td align="center" colspan="3"><strong>Total</strong></td>
+                        </tr>
+                        <tr>
+                        	<td align="right" colspan="3"><strong><?php echo number_format($in_grand_total, 0, ',', '.'); ?></strong></td>
+                            <td align="right" colspan="3"><strong><?php echo number_format($out_grand_total, 0, ',', '.'); ?></strong></td>
+                            <td align="right" colspan="3"><strong><?php echo number_format($in_grand_total+$out_grand_total, 0, ',', '.'); ?></strong></td>
+                        </tr>
                     </table>
                     
                     <?php echo anchor('cashier/payment/pdf_summary_result/' . $date, 'EXPORT TO PDF'); ?>

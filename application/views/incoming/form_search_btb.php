@@ -1,8 +1,10 @@
 <div id="content">
 	<h2>Pencarian Berdasarkan No SMU</h2>
 	<?php 	echo form_open('incoming/search_btb');?>
+    		<div class="input-append">
 			<input type="text" name="smu" placeholder="masukan no smu">
 			<input type="submit" value="search" class="btn btn-primary">
+            </div>
 	<?php	
 			echo form_close();?>
 <div id="printableArea" >    

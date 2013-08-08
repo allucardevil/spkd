@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">-->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>PT Gapura Angkasa KNO - Warehouse Management System</title>
+<title>PT Gapura Angkasa DPS - Administration Management System</title>
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">

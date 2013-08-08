@@ -7,6 +7,7 @@ html{
 	margin:15px;
 }
 
+
 table.gridtable {
 	font-family: times,arial,sans-serif;
 	font-size:14px;
@@ -17,7 +18,7 @@ table.gridtable {
 	margin-top:10px;
 	margin-bottom:2px;
 	border-top: 1px solid;
-	width:270mm;
+	
 	height:auto;
 	
 }
@@ -44,13 +45,15 @@ table.gridtable td {
 
 </head>
 <body>
-<div id='content'>
-            	<h2>Summary Report</h2>
+
+            	<p><strong>PT Gapura Angkasa - PT Angkasa Pura II (persero)</strong></p>
+                <p><strong>Domestic Cargo Warehouse - Kualanamu International Airport</strong></p>
+                <p><strong>Income Summary Report - <?php echo strtoupper(mdate("%d %F %Y", strtotime($date))); ?></strong></p>
 					
-                    <table  border="1" class="gridtable">
+                    <table  border="1" class="gridtable" width="1024px">
                     		<tr>
-                            	<td colspan="3"><div align="center"><strong><?php echo strtoupper(mdate("%d-%M-%Y", strtotime($date))); ?></strong></div></td>
-                            	<td colspan="6"><div align="center"><strong>INCOMING SUMMARY INCOME</strong></div></td>
+                            	<td colspan="3" width="30%"><div align="center"><strong><?php echo strtoupper(mdate("%d-%M-%Y", strtotime($date))); ?></strong></div></td>
+                            	<td colspan="6" width="70%"><div align="center"><strong>INBOUND SUMMARY INCOME</strong></div></td>
                             </tr>	
                         <tr>
                             	<td><div align="center"><strong>Airline</strong></div></td>
@@ -66,16 +69,16 @@ table.gridtable td {
                     <?php 
 					$tot_koli = 0;
 					$tot_berat = 0;
-					$grand_total = 0;
+					$in_grand_total = 0;
 					foreach($incoming as $items): 	
 					$tot_koli = $tot_koli + $items->in_koli;
 					$tot_berat = $tot_berat +  $items->in_berat_bayar;
-					$grand_total = $grand_total + $items->totbiaya;
+					$in_grand_total = $in_grand_total + $items->totbiaya;
 					?>
     						
                             
                              <tr>
-                             	<td><strong><?php echo strtoupper($items->in_airline); ?></strong></td>
+                             	<td><div align="center"><strong><?php echo strtoupper($items->in_airline); ?></strong></div></td>
                                 <td><div align="right"><?php echo number_format($tot_koli, 0, ',', '.'); ?></div></td>
                                 <td><div align="right"><?php echo number_format($tot_berat, 0, ',', '.'); ?></div></td>
                                 <td><div align="right"><?php echo number_format($items->whc, 0, ',', '.'); ?></div></td>
@@ -90,16 +93,16 @@ table.gridtable td {
                     <?php endforeach; ?>
                     
                     		<tr>
-                             	<td colspan="8"><strong>GRAND TOTAL</strong></td>
-                                <td><strong><?php echo number_format($grand_total, 0, ',', '.'); ?></strong></td>
+                             	<td colspan="8"><div align="center"><strong>GRAND TOTAL</strong></div></td>
+                                <td><div align="right"><strong><?php echo number_format($in_grand_total, 0, ',', '.'); ?></strong></div></td>
                              </tr>  
                     
                     </table>
                     
-                     <table  border="1" class="gridtable">
+                     <table  border="1" class="gridtable" width="1024px">
                     		<tr>
-                            	<td colspan="3"><div align="center"><strong><?php echo strtoupper(mdate("%d-%M-%Y", strtotime($date))); ?></strong></div></td>
-                            	<td colspan="6"><div align="center"><strong>OUTGOING SUMMARY INCOME</strong></div></td>
+                            	<td colspan="3" width="30%"><div align="center"><strong><?php echo strtoupper(mdate("%d-%M-%Y", strtotime($date))); ?></strong></div></td>
+                            	<td colspan="6" width="70%"><div align="center"><strong>OUTBOUND SUMMARY INCOME</strong></div></td>
                             </tr>	
                            <tr>
                             	<td><div align="center"><strong>Airline</strong></div></td>
@@ -113,13 +116,13 @@ table.gridtable td {
                                 <td><div align="center"><strong>Total</strong></div></td>
                             </tr>
                     <?php 
-					$tot_koli = 0;
+						$tot_koli = 0;
 					$tot_berat = 0;
-					$grand_total = 0;
+					$out_grand_total = 0;
 					foreach($outgoing as $items): 	
 					$tot_koli = $tot_koli + $items->btb_totalkoli;
 					$tot_berat = $tot_berat +  $items->btb_totalberatbayar;
-					$grand_total = $grand_total + $items->totbiaya;
+					$out_grand_total = $out_grand_total + $items->totbiaya;
 					?>
     						
                             
@@ -139,11 +142,27 @@ table.gridtable td {
                     <?php endforeach; ?>
                     
                     		<tr>
-                             	<td colspan="8"><strong>GRAND TOTAL</strong></td>
-                                <td><strong><?php echo number_format($grand_total, 0, ',', '.'); ?></strong></td>
+                             	<td colspan="8"><div align="center"><strong>GRAND TOTAL</strong></div></td>
+                                <td><div align="right"><strong><?php echo number_format($out_grand_total, 0, ',', '.'); ?></strong></div></td>
                              </tr>  
                     
                     </table>
-</div>
+                    
+                    <table  border="1" class="gridtable" width="1024px">
+                    	<tr>
+                        	<td colspan="9"><div align="center"><strong>L E G E N D</strong></div></td>
+                        </tr>
+                    	<tr>
+                        	<td colspan="3"><div align="center"><strong>Inbound</strong></div></td>
+                            <td colspan="3"><div align="center"><strong>Outbound</strong></div></td>
+                            <td colspan="3"><div align="center"><strong>Total</strong></div></td>
+                        </tr>
+                        <tr>
+                        	<td colspan="3"><div align="center"><strong><?php echo number_format($in_grand_total, 0, ',', '.'); ?></strong></div></td>
+                            <td colspan="3"><div align="center"><strong><?php echo number_format($out_grand_total, 0, ',', '.'); ?></strong></div></td>
+                            <td colspan="3"><div align="center"><strong><?php echo number_format($in_grand_total+$out_grand_total, 0, ',', '.'); ?></strong></div></td>
+                        </tr>
+                    </table>
+
 </body>
 </html>

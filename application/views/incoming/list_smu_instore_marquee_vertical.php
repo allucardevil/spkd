@@ -42,7 +42,7 @@ table.gridtable td {
 <body>
 <div id="content">
 	<center>
-    <table class="gridtable" width="100%">
+    <table class="gridtable" width="1980px">
     	<tr>
         	<td colspan="5" align="center"><center>Kualanamu International Airport</center></td>
         </tr>
@@ -57,7 +57,7 @@ table.gridtable td {
             <td width="20%">Berat</td>
         </tr>
         </table>
-	<marquee  scrollamount="2" direction="down" loop="true" height="768px">
+	<marquee  scrollamount="2" direction="down" loop="true" height="1800px">
 		<font color="#ffffff">
 			<strong> 
 				

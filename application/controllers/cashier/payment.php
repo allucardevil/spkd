@@ -25,7 +25,12 @@ class Payment extends CI_Controller {
 	
 	public function index()
 	{
-		redirect('cashier/payment/new_receipt');
+		#view call
+		$this->load->view('template/header');
+		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
+		$this->load->view('cashier/dashboard');
+		$this->load->view('template/footer');
 	}
 	
 	public function new_receipt()
@@ -548,19 +553,11 @@ class Payment extends CI_Controller {
 		$data['outgoing'] = $this->cashier_model->outgoing_summary_income($date);
 		
 		
-		/*$this->load->view('template/header');
-		$this->load->view('template/breadcumb');
-		#$this->load->view('cashier/menu');
-		$this->load->view('cashier/summary_result', $data);
-		$this->load->view('template/footer');*/
 		# Helper Load
 		$this->load->helper('sigap_pdf');
-		#$this->load->view('cashier/pdf/print_dbi',$data);
-		
-		# PDF Maker
 		$stream = TRUE; 
 		$papersize = 'legal'; 
-		$orientation = 'potrait';
+		$orientation = 'landscape';
 		$filename = 'summary-'.$date;
 		$stn = 'kno';
 		$html = '';
@@ -568,6 +565,62 @@ class Payment extends CI_Controller {
      	pdf_create($html, $filename, $stream, $papersize, $orientation, $stn);
 		$full_filename = $filename . '.pdf';
 		
+	}
+	
+	function reconciliation()
+	{
+		$this->load->view('template/header');
+		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
+		$this->load->view('cashier/reconciliation');
+		$this->load->view('template/footer');
+	}
+	
+	function reconciliation_result()
+	{
+		$date = mdate('%Y-%m-%d', strtotime($this->input->post('date')));
+		$data['date']=$date;
+		
+		#model call
+		$this->load->model('cashier_model');
+		$data['incoming'] = $this->cashier_model->incoming_summary_income($date);
+		$data['outgoing'] = $this->cashier_model->outgoing_summary_income($date);
+		
+		
+		$this->load->view('template/header');
+		$this->load->view('template/breadcumb');
+		#$this->load->view('cashier/menu');
+		$this->load->view('cashier/reconciliation_result', $data);
+		$this->load->view('template/footer');
+	}
+	
+	function pdf_reconciliation_result()
+	{
+		$date = mdate('%Y-%m-%d', strtotime($this->uri->segment(4)));
+		$data['date']=$date;
+		
+		#model call
+		$this->load->model('cashier_model');
+		$data['incoming'] = $this->cashier_model->incoming_summary_income($date);
+		$data['outgoing'] = $this->cashier_model->outgoing_summary_income($date);
+		
+		
+		# Helper Load
+		$this->load->helper('sigap_pdf');
+		$stream = TRUE; 
+		$papersize = 'legal'; 
+		$orientation = 'potrait';
+		$filename = 'summary-'.$date;
+		$stn = 'kno';
+		$html = '';
+		$html = $this->load->view('cashier/pdf/pdf_reconciliation_result', $data, true);
+     	pdf_create($html, $filename, $stream, $papersize, $orientation, $stn);
+		$full_filename = $filename . '.pdf';
+		
+	}
+	
+	function piutang_agent()
+	{
 	}
 	
 }

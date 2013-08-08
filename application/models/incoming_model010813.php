@@ -121,9 +121,8 @@ class Incoming_model extends CI_Model {
 				'status'	=>	'waiting',
 			);
 		$this->db->insert('manifestin',$data);
-		return $this->db->insert_id();
 	}
-	 
+	
 	public function get_id_manifestin($noflight,$tgl_manifest)
 	{
 		$where = array(
@@ -155,7 +154,6 @@ class Incoming_model extends CI_Model {
 			'totalberatbayar' => $berat,
 		);
 		$this->db->insert('isimanifestin',$data);
-		return $this->db->insert_id();
 	}
 	public function get_id_isimanifestin($id_manifestin,$smu)
 	{
@@ -207,7 +205,7 @@ class Incoming_model extends CI_Model {
 	}
 	public function delete_last_breakdown()
 	{
-		$query = "SELECT id_breakdown AS 'id' FROM breakdown ORDER BY id DESC LIMIT 1 ";
+		$query = "SELECT MAX(id_breakdown) AS 'id' FROM breakdown ";
 		$query = $this->db->query($query);
 		$hasil = $query->result();
 		
@@ -334,211 +332,6 @@ class Incoming_model extends CI_Model {
 	{
 		$this->db->where('id_isimanifestin',$id);
 		$this->db->update('isimanifestin',$data);
-	}
-	public function get_data_inbreakdown($smu)
-	{
-		$query ="	SELECT * FROM in_breakdown 
-					WHERE inb_no_smu='$smu' AND inb_status_void='no'
-					ORDER BY inb_id DESC LIMIT 10 
-					";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	public function get_data_inbreakdown_btb($smu)
-	{
-		$query ="	SELECT * FROM in_breakdown 
-					LEFT JOIN in_dtbarang ON in_breakdown.inb_no_smu = in_dtbarang.in_smu  
-					WHERE inb_no_smu='$smu'
-					ORDER BY inb_id DESC LIMIT 10 
-					";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	
-	public function insert_data_in_breakdown($airlines,$smu,$koli,$berat,$status)
-	{
-		$data = array(
-				"inb_airlines"	=> $airlines,
-				"inb_no_smu"	=> $smu,
-				"inb_koli"	=> $koli,
-				"inb_berat_aktual"	=> $berat,
-				"inb_status_gudang"	=>	$status,
-			);
-		$this->db->insert('in_breakdown',$data);
-	}
-	
-	public function insert_data_in_breakdown_outstore($airlines,$flt, $smu,$koli,$berat,$status, $date)
-	{
-		$data = array(
-				"inb_airlines"	=> $airlines,
-				"inb_flight_number" => $flt,
-				"inb_flight_date" => $date,
-				"inb_no_smu"	=> $smu,
-				"inb_koli"	=> $koli,
-				"inb_berat_aktual"	=> $berat,
-				"inb_status_gudang"	=>	$status,
-			);
-		$this->db->insert('in_breakdown',$data);
-	}
-	
-	public function get_data_in_breakdown_by_id($id)
-	{
-		$query ="	SELECT * FROM in_breakdown 
-					WHERE inb_id='$id'
-					";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	public function insert_data_btb($dtb)
-	{
-		$this->db->insert('in_dtbarang',$dtb);
-	}
-	public function get_detail_btb_by_btb_no($btb_no)
-	{
-		$query = "	SELECT * FROM in_dtbarang 
-					WHERE in_btb = '$btb_no'
-					GROUP BY in_btb
-				";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	public function get_detail_berat_btb_by_btb_no($btb_no)
-	{
-		$query = "	SELECT * FROM in_dtbarang 
-					WHERE in_btb = '$btb_no'
-				";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	public function get_id_breakdown($smu)
-	{
-		$query = "	SELECT * FROM in_breakdown 
-					WHERE inb_no_smu = '$smu'
-				";
-		$query = $this->db->query($query);
-		if($query->num_rows() > 0){
-			$hasil = $query->result();
-			foreach($hasil as $row)
-			{
-				return $row->inb_id; 
-			}
-		} else{
-			return 0 ;
-		}
-	}
-	public function get_data_breakdown($smu)
-	{
-		$query = "	
-			SELECT * FROM in_dtbarang 
-			LEFT JOIN in_breakdown ON inb_no_smu = in_smu
-			WHERE in_smu = '$smu'
-				";
-		$query = $this->db->query($query);
-		return	$query->result();
-	}
-	public function update_status_void_breakdown($inb_id)
-	{
-		$this->db->where('inb_id',$inb_id);
-		$this->db->update('in_breakdown',array('inb_status_void' => 'yes'));
-	}
-	public function get_data_inbreakdown_btb_by_date($date)
-	{
-		$query ="	
-					SELECT * FROM in_breakdown 
-					LEFT JOIN in_dtbarang ON inb_no_smu = in_smu  
-					WHERE in_tgl_manifest='$date'
-					ORDER BY inb_id DESC
-					";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	
-	public function get_list_smu_instore()
-	{
-		$query ="	
-		
-		SELECT * FROM in_breakdown as bd
-		LEFT JOIN ( SELECT * from in_dtbarang WHERE in_status_bayar = 'no' ) as isi  ON isi.in_smu = bd.inb_no_smu
-		WHERE inb_status_gudang = 'instore'
-		AND inb_status_void = 'no'
-		
-				";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	
-	public function get_list_smu_instore_by_date($date)
-	{
-		$query ="	
-		
-		SELECT * FROM in_breakdown as bd
-		LEFT JOIN ( SELECT * from in_dtbarang WHERE in_status_bayar = 'no'  ) as isi  ON isi.in_smu = bd.inb_no_smu
-		WHERE inb_status_gudang = 'instore'
-		AND inb_flight_date = '" . $date . "'
-		AND inb_status_void = 'no'
-		
-				";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	
-	public function get_list_smu_outstore_by_date($date)
-	{
-		$query ="	
-		
-		SELECT * FROM in_breakdown as bd
-		LEFT JOIN ( SELECT * from in_dtbarang WHERE in_status_bayar = 'no'  ) as isi  ON isi.in_smu = bd.inb_no_smu
-		WHERE inb_status_gudang = 'outstore'
-		AND inb_flight_date = '" . $date . "'
-		AND inb_status_void = 'no'
-		
-				";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	
-	public function get_list_smu_instore_incomplete_data()
-	{
-		$query ="	
-		
-		SELECT * FROM in_breakdown as bd
-		LEFT JOIN ( SELECT * from in_dtbarang WHERE in_status_bayar = 'no'  AND in_btb = '') as isi  ON isi.in_smu = bd.inb_no_smu
-		WHERE inb_status_gudang = 'instore'
-		AND inb_status_void = 'no'
-		ORDER BY inb_update_on DESC
-				";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	
-	public function duplicate_smu()
-	{
-		$query ="	
-		
-		SELECT *, COUNT(inb_no_smu) as smu FROM in_breakdown as bd
-		LEFT JOIN ( SELECT * from in_dtbarang WHERE in_status_bayar = 'no'  AND in_btb = '') as isi  ON isi.in_smu = bd.inb_no_smu
-		WHERE inb_status_gudang = 'instore'
-		AND inb_status_void = 'no'
-		HAVING smu > 1
-		ORDER BY inb_update_on DESC
-				";
-		$query = $this->db->query($query);
-		return $query->result();
-	}
-	
-	public function create_breakdown($flt_no,$date)
-	{
-		$query ="	
-		SELECT * 
-		FROM  `in_breakdown` 
-		WHERE  `inb_status_void` =  'no'
-		AND  `inb_status_gudang` =  'outstore'
-		AND  `inb_flight_number` =  '" . $flt_no . "' 
-		AND `inb_flight_date` = '" . $date . "'
-		ORDER BY inb_no_smu ASC
-				";
-		$query = $this->db->query($query);
-		return $query->result();
 	}
 }
 

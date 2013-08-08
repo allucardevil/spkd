@@ -3,23 +3,15 @@
 class Incoming extends CI_Controller {
 
 	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
 	public function index()
 	{
-		redirect('incoming/add_manifest_instore');
+		#view call
+		$this->load->view('template/header');
+		$this->load->view('template/breadcumb');
+		$this->load->view('incoming/menu');
+		$this->load->view('incoming/dashboard');
+		$this->load->view('template/footer');
 	}
 	
 	############ Instore #############
@@ -297,8 +289,113 @@ class Incoming extends CI_Controller {
 		}
 	}
 	
+	public function form_instore()
+	{
+			$this->load->view('template/header');
+			$this->load->view('template/breadcumb');
+			$this->load->view('incoming/menu');
+			$this->load->view('incoming/form_instore');
+			$this->load->view('template/footer');	
+	}
 	
+	public function form_outstore()
+	{
+			$this->load->view('template/header');
+			$this->load->view('template/breadcumb');
+			$this->load->view('incoming/menu');
+			$this->load->view('incoming/form_outstore');
+			$this->load->view('template/footer');	
+	}
 	
+	public function instore()
+	{
+			$date = mdate("%Y-%m-%d", strtotime($this->input->post('date')));
+			$this->load->model('incoming_model');
+			$data['result'] = $this->incoming_model->get_list_smu_instore_by_date($date);
+			$this->load->view('template/header');
+			$this->load->view('template/breadcumb');
+			$this->load->view('incoming/menu');
+			$this->load->view('incoming/list_instore',$data);
+			$this->load->view('template/footer');	
+	}
+	
+	public function outstore()
+	{
+			$date = mdate("%Y-%m-%d", strtotime($this->input->post('date')));
+			$this->load->model('incoming_model');
+			$data['result'] = $this->incoming_model->get_list_smu_outstore_by_date($date);
+			$this->load->view('template/header');
+			$this->load->view('template/breadcumb');
+			$this->load->view('incoming/menu');
+			$this->load->view('incoming/list_outstore',$data);
+			$this->load->view('template/footer');	
+	}
+	
+	public function instore_incomplete_data()
+	{
+			
+			$this->load->model('incoming_model');
+			$data['result'] = $this->incoming_model->get_list_smu_instore_incomplete_data();
+			$this->load->view('template/header');
+			$this->load->view('template/breadcumb');
+			$this->load->view('incoming/menu');
+			$this->load->view('incoming/list_instore',$data);
+			$this->load->view('template/footer');	
+	}
+	
+	public function duplicate_smu()
+	{
+			
+			$this->load->model('incoming_model');
+			$data['result'] = $this->incoming_model->duplicate_smu();
+			$this->load->view('template/header');
+			$this->load->view('template/breadcumb');
+			$this->load->view('incoming/menu');
+			$this->load->view('incoming/list_instore',$data);
+			$this->load->view('template/footer');	
+	}
+	
+	public function form_breakdown()
+	{
+			$this->load->view('template/header');
+			$this->load->view('template/breadcumb');
+			$this->load->view('incoming/menu');
+			$this->load->view('incoming/form_breakdown');
+			$this->load->view('template/footer');	
+	}
+	
+	public function breakdown_checklist()
+	{
+			$flt_no = $this->input->post('flt_no');
+			if($flt_no==NULL){redirect('incoming/form_breakdown');};
+			$date = mdate("%Y-%m-%d", strtotime($this->input->post('date')));
+			$this->load->model('incoming_model');
+			$data['result'] = $this->incoming_model->create_breakdown($flt_no,$date);
+			
+			$this->load->view('template/header');
+			$this->load->view('template/breadcumb');
+			$this->load->view('incoming/menu');
+			$this->load->view('incoming/breakdown_checklist', $data);
+			$this->load->view('template/footer');	
+	}
+	
+	public function breakdown_checklist_pdf()
+	{
+			$flt_no = $this->uri->segment(3,0);
+			$date = mdate("%Y-%m-%d", strtotime($this->uri->segment(4,0)));
+			$this->load->model('incoming_model');
+			$data['result'] = $this->incoming_model->create_breakdown($flt_no,$date);
+			
+			$this->load->helper('sigap_pdf');
+			$stream = TRUE; 
+			$papersize = 'legal'; 
+			$orientation = 'potrait';
+			$filename = 'breakdown-checklist-' . $flt_no . '-' . $date;
+			$stn = $this->input->post('hs_service_site');
+			$html = $this->load->view('incoming/breakdown_checklist_pdf', $data, true);
+			pdf_create($html, $filename, $stream, $papersize, $orientation, $stn);
+			$full_filename = $filename . '.pdf';
+	}
 }
 
 /* End of file welcome.php */

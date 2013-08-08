@@ -1,4 +1,5 @@
 <div id="content">
+<h2>Input data SMU barag yang belum diterima di gudang</h2>
 	<?php echo form_open('incoming/insert_manifest_outstore'); ?>
     
 		<table>
@@ -51,8 +52,8 @@
 				<?php // echo form_open('incoming/create_btb'); ?>
 				<tr>
 					<td><?php echo $no; ?></td>
-					<td><input type="text" name="airlines" value="<?php echo $row->inb_airlines;?>" readonly class="span2"></td>
-                    <td><input type="text" name="flt_no" value="<?php echo $row->inb_flight_number;?>" readonly class="span2"></td>
+					<td><input type="text" name="airlines" value="<?php echo strtoupper($row->inb_airlines);?>" readonly class="span2"></td>
+                    <td><input type="text" name="flt_no" value="<?php echo strtoupper($row->inb_flight_number);?>" readonly class="span2"></td>
 					<td><input type="text" name="no_smu" value="<?php echo $row->inb_no_smu;?>" readonly  class="span2"></td>
 					<td><input type="text" name="koli" value="<?php echo $row->inb_koli;?>" readonly class="span2"></td>
 					<td><input type="text" name="berat_aktual" value="<?php echo $row->inb_berat_aktual;?>" readonly class="span2"></td>

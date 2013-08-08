@@ -4,7 +4,7 @@
 			$session_data = $this->session->userdata('logged_in');
 			if($this->session->userdata('logged_in'))
 			{
-				echo anchor('dashboard', strtoupper($session_data['level']), 'class="btn btn-default"'); 
+				echo anchor('dashboard', strtoupper($session_data['id_user']) . ' [ ' . $session_data['level'] . ' ]', 'class="btn btn-default"'); 
 			}
 			?>
             
@@ -42,10 +42,7 @@
 			# level kasir
 			if($session_data['level'] == 'kasir')
 	    	{
-				echo anchor('cashier/payment','NPJG Baru', 'class="btn btn-default"'); 
-				echo anchor('harian/incoming','LPKH Incoming', 'class="btn btn-default"');
-				echo anchor('harian/outgoing','LPKH Outgoing', 'class="btn btn-default"'); 
-				echo anchor('cashier/payment/my_balance','Transaksiku', 'class="btn btn-default"'); 
+				echo anchor('cashier/payment','Kasir', 'class="btn btn-default"'); 
 			}
 			?>
             
@@ -68,9 +65,7 @@
 			# level incoming
 			if($session_data['level'] == 'incoming')
 	    	{
-			 	echo anchor('incoming/add_manifest_instore','Input SMU Barang Gudang', 'class="btn btn-default"'); 
-				echo anchor('incoming/form_create_btb','Create BTB Incoming', 'class="btn btn-default"'); 
-				echo anchor('incoming/search_btb','Search Incoming SMU', 'class="btn btn-default"'); 
+			 	echo anchor('incoming','Inbound Area', 'class="btn btn-default"'); 
 			}
 			?>
             
