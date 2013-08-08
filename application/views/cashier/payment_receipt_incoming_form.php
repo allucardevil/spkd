@@ -9,8 +9,14 @@ var total=document.getElementById("total");
 var disc=document.getElementById("discount");
 var day=document.getElementById("day");
 var berat=document.getElementById("berat_bayar");
+var strg=document.getElementById("storage");
 
-var tsg = Number(sewa_gudang.value)*Number(day.value)*Number(berat.value);
+var stg_val = 1;
+if (strg.value != 'Regular')
+{
+	stg_val = 2;
+}
+var tsg = Number(sewa_gudang.value)*Number(day.value)*Number(berat.value)*stg_val;
 var total_bayar = Number(admin.value) + tsg;
 var ppn_value = Number(ppn.value) * total_bayar/100;
 var total_all = total_bayar + ppn_value;
@@ -39,7 +45,7 @@ document.getElementById("total").value = tsg;
 					}
 					//echo form_hidden('btb_type',strtoupper($type));
 					?>
-					<input name="day" id="day" class="span2" placeholder="ALL" type="hidden" value="<?php echo $jumhari; ?>" >
+					<input name="day" id="day" class="span2" placeholder="ALL" type="hidden" value="<?php echo $jumhari-2; ?>" >
 					<input name="type" id="type" class="span2" placeholder="ALL" type="hidden" value="0" >
 					<input name="minc" id="minc" class="span2" placeholder="ALL" type="hidden" value="<?php echo $mincharge; ?>" >
 					<input name="minw" id="minw" class="span2" placeholder="ALL" type="hidden" value="<?php echo $minweight; ?>" >
@@ -102,8 +108,15 @@ document.getElementById("total").value = tsg;
 						<td><input name="sewa_gudang" id="sewa_gudang" class="span2" placeholder="ALL" type="text" value="<?php echo $sph; ?>" onchange='javascript:hitungtotal(this.value)'></td>
 					</tr>
 					<tr>
-					<td>Disc. (% | Rp)</td>
-						<td><input name="discount" size="5" onchange='javascript:hitungtotal(this.value)' type="text" readonly><input type="text" name="disc_rp" id="disc_rp" size="20" readonly></td>
+					<td>Storage</td>
+						<td><?php 
+							$data = array(
+									'Regular' => 'Regular',
+									'Cool Storage' => 'Cool Storage',	
+									'Cold Storage' => 'Cold Storage',	
+									'Strong Room' => 'Strong Room',	
+								);
+						echo form_dropdown('storage',$data, 'Regular', 'id="storage" onchange="javascript:hitungtotal(this.value)"');?></td>
 					</tr>
 					<tr>
 						<td>Total Sewa Gudang (Rp)</td>
