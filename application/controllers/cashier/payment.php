@@ -266,14 +266,9 @@ class Payment extends CI_Controller {
 		$user = $this->session->userdata('logged_in');
 		$user = $user['id_user'];
 		$no_db = $this->cashier_model->get_last_db();
-		if($this->input->post('agent') <> 'POS INDONESIA')
-		{
-			$no_faktur = $this->cashier_model->get_last_faktur();
-		} else {$no_faktur = '';}
+		$no_faktur = $this->cashier_model->get_last_faktur();
 		
 		# data preparing
-		$print['print'] = $this->input->post('btb_no');
-		$print['nodb'] = $no_db;
 		$data = array(
 				'no_smubtb' => $this->input->post('btb_no'),
 				'document' => $this->input->post('administrasi'),
@@ -302,6 +297,9 @@ class Payment extends CI_Controller {
 			);
 		
 		$this->cashier_model->save_db($data);
+		
+		$print['print'] = $this->input->post('btb_no');
+		$print['nodb'] = $no_db;
 		
 		#View Call
 		$this->load->view('template/header');

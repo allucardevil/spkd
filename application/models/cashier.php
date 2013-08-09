@@ -20,6 +20,81 @@ class Cashier extends CI_Model {
 	 * phone : 0361 853 2400
 	 * email : pandhawa.digital@gmail.com
 	 */
+	public function get_last_db()
+	 {
+		#$this->db->select_max('wo_id');
+		$this->db->order_by('nodb','DESC');
+		$this->db->limit(1);
+		$query = $this->db->get('deliverybill');
+		
+		# prepare value
+		$pr_date = mdate("%Y", time());
+		$pr_start = '0000000';
+		
+		if($query -> num_rows() != 0)
+		{
+			# handling not empty record
+			foreach($query->result() as $item):
+				$query = $item->nodb;
+			endforeach;
+			
+			# handling same date
+			if(substr($query, 0, 4) == mdate("%Y", time()))
+			{
+				$date_serial = substr($query, 0, 4);
+				$serial_number = substr($query, 7) + 1;
+				$serial_number =  sprintf("%1$07d", $serial_number);
+				$query = $date_serial . $serial_number;
+			}
+			else # handling different date / restart new serial number
+			{
+				$query = $pr_date  . $pr_start;	
+			}
+			return $query;
+		} else {
+			# handling empty record
+			$query = $pr_date . $pr_start;
+			return $query;
+		}
+	 }
+	 
+	 public function get_last_faktur()
+	 {
+		#$this->db->select_max('wo_id');
+		$this->db->order_by('nofaktur','DESC');
+		$this->db->limit(1);
+		$query = $this->db->get('deliverybill');
+		
+		# prepare value
+		$pr_date = mdate("%y", time());
+		$pr_start = '00000000';
+		
+		if($query -> num_rows() != 0)
+		{
+			# handling not empty record
+			foreach($query->result() as $item):
+				$query = $item->nofaktur;
+			endforeach;
+			
+			# handling same date
+			if(substr($query, 0, 2) == mdate("%y", time()))
+			{
+				$date_serial = substr($query, 0, 2);
+				$serial_number = substr($query, 6) + 1;
+				$serial_number =  sprintf("%1$08d", $serial_number);
+				$query = $date_serial . $serial_number;
+			}
+			else # handling different date / restart new serial number
+			{
+				$query = $pr_date  . $pr_start;	
+			}
+			return $query;
+		} else {
+			# handling empty record
+			$query = $pr_date . $pr_start;
+			return $query;
+		}
+	 }
 	 
 	public function payment_receipt_incoming($search)
 	{
@@ -167,86 +242,6 @@ class Cashier extends CI_Model {
 	{
 		$this->db->update('var_agent', array('agent_deposit'=>$deposit_cash), array('agent_id'=>$agent_id));
 	}
-	
-	public function get_last_db()
-	 {
-		#$this->db->select_max('wo_id');
-		$this->db->order_by('nodb','DESC');
-		$this->db->limit(1);
-		$query = $this->db->get('deliverybill');
-		
-		# prepare value
-		$pr_date = mdate("%Y", time());
-		$pr_start = '0000000';
-		
-		if($query -> num_rows() == 0)
-   		{
-			# handling empty record
-			$query = $pr_date . $pr_start;
-			return $query;
-		}
-		else
-		{
-			# handling not empty record
-			foreach($query->result() as $item):
-				$query = $item->nodb;
-			endforeach;
-			
-			# handling same date
-			if(substr($query, 0, 4) == mdate("%Y", time()))
-			{
-				$date_serial = substr($query, 0, 4);
-				$serial_number = substr($query, 7) + 1;
-				$serial_number =  sprintf("%1$07d", $serial_number);
-				$query = $date_serial . $serial_number;
-			}
-			else # handling different date / restart new serial number
-			{
-				$query = $pr_date  . $pr_start;	
-			}
-			return $query;
-		}
-	 }
-	 
-	 public function get_last_faktur()
-	 {
-		#$this->db->select_max('wo_id');
-		$this->db->order_by('nofaktur','DESC');
-		$this->db->limit(1);
-		$query = $this->db->get('deliverybill');
-		
-		# prepare value
-		$pr_date = mdate("%y", time());
-		$pr_start = '00000000';
-		
-		if($query -> num_rows() == 0)
-   		{
-			# handling empty record
-			$query = $pr_date . $pr_start;
-			return $query;
-		}
-		else
-		{
-			# handling not empty record
-			foreach($query->result() as $item):
-				$query = $item->nofaktur;
-			endforeach;
-			
-			# handling same date
-			if(substr($query, 0, 2) == mdate("%y", time()))
-			{
-				$date_serial = substr($query, 0, 2);
-				$serial_number = substr($query, 6) + 1;
-				$serial_number =  sprintf("%1$08d", $serial_number);
-				$query = $date_serial . $serial_number;
-			}
-			else # handling different date / restart new serial number
-			{
-				$query = $pr_date  . $pr_start;	
-			}
-			return $query;
-		}
-	 }
 	 
 	 function do_void_dbo($no_btb, $user)
 	 {
